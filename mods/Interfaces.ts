@@ -1,4 +1,4 @@
-interface Bosse {
+export default interface Bosse {
     id: number,
     name: string,
     hp: number,
@@ -14,7 +14,7 @@ interface Bosse {
     rarity: number
 }
 
-interface Classe {
+export default interface Classe {
     id: number,
     name: string,
     strengths: number[],
@@ -24,7 +24,7 @@ interface Classe {
     rarity: number
 }
 
-interface Enemy {
+export default interface Enemy {
     id: number,
     name: string,
     hp: number,
@@ -40,7 +40,7 @@ interface Enemy {
     rarity: number
 }
 
-interface Player {
+export default interface Player {
     id: number,
     name: string,
     hp: number,
@@ -56,31 +56,29 @@ interface Player {
     rarity: number
 }
 
-interface Race  {
+export default interface Race  {
     id: number,
     name: string,
     strength: number[],
     weakness: number[],
-    rarity: string
+    rarity: number
 }
 
-interface Spell {
+export default interface Spell {
     id: number,
     name: string,
     cost: number,
     dmg: number,
     effect: string,
     cooldown: number,
-    race: string
-    class: string,
+    race: number
+    class: number,
     rarity: number
 }
 
-interface Trap { 
+export default interface Trap { 
     id: number, 
     name: string, 
     requirement: string, 
     rarity: number 
 }
-
-export { Bosse, Classe, Enemy, Player, Race, Spell, Trap};
