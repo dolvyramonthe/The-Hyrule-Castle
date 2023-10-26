@@ -1,31 +1,38 @@
 import * as fs from 'fs';
 import Player from './Interfaces';
 
-const getRandomElement = (array: any[]) => {
-    let pickedValue: number = 0;
-    let randomNumber: number = Math.random();
-    let threshold: number = 0;
-    let defaultPlayer: any = {};
+interface NewPlayer {
+    id: number;
+    name: string;
+    hp: number;
+    mp: number;
+    str: number;
+    int: number;
+    def: number;
+    res: number;
+    spd: number;
+    luck: number;
+    race: number;
+    class: number;
+    rarity: number;
+    probability: number;
+}
 
-    for (let i: number = 0; i < array.length; i++) {
-        if (array[i].probability === 0) {
-            continue;
-        }
-
-        threshold += array[i].probability;
-
-        if (threshold > randomNumber) {
-                pickedValue = array[i].id;
-                break;
-        }
-
-        if (!pickedValue) {
-            defaultPlayer = array.find((item) => item.probability === 0);
-            pickedValue = defaultPlayer.id;
-        }
+function getRandomElement(array: NewPlayer[]): number | null {
+    const totalProbability = array.reduce((acc, obj) => acc + obj.probability, 0);
+    if (totalProbability <= 0) {
+        return -1;
     }
 
-    return pickedValue;
+    let randomValue = Math.random() * totalProbability;
+    for (const item of array) {
+        if (randomValue < item.probability) {
+            return item.id;
+        }
+        randomValue -= item.probability;
+    }
+
+    return null;
 }
 
 export default function getPlayer(filePath: string): Player {
@@ -69,11 +76,21 @@ export default function getPlayer(filePath: string): Player {
         }
     }
     
-    const playerId: number = getRandomElement(newPlayersList);
+    let playerId: number | null = getRandomElement(newPlayersList);
 
-    console.log(playerId);
+    while(!playerId) {
+        playerId = getRandomElement(newPlayersList);
+    }
 
-    // player = players.find((item) => item.id === playerId);
-
+    if(playerId != -1) {
+        for (const item of players) {
+            if(item.id === playerId) {
+                player = item;
+            }
+        }
+    } else {
+        console.error("Players' list is not valid!");
+    }
+    
     return player;
 }
