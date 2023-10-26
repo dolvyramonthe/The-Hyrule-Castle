@@ -1,13 +1,14 @@
 import * as rl from 'readline-sync';
 import Player from './Interfaces';
 import getPlayer from './getPlayersData';
+import levelAndExperienceUp from './mods/level_and_experience';
 
 let player : Player;
 let enemy : Player;
 let bosse : Player;
-const playerPath: string = '../json/players.json';
-const enemyPath: string = '../json/enemies.json';
-const bossePath: string = '../json/bosses.json';
+const playerPath: string = './json/players.json';
+const enemyPath: string = './json/enemies.json';
+const bossePath: string = './json/bosses.json';
 
 try {
     player = getPlayer(playerPath);
@@ -33,7 +34,8 @@ function displayStatistics(
     floor: number, 
     fight: number,
     enemyMaxHp: number,
-    playerMaxHp: number
+    playerMaxHp: number,
+    playerExperience: number
     ) {
     let enemyHp: string = "";
     let playerHp: string = "";
@@ -49,7 +51,7 @@ function displayStatistics(
     console.log('\x1b[033m\x1b[39m', 'HP:', enemyHp, enemy.hp, '/', enemyMaxHp);
     console.log('\n');
     console.log('\x1b[033m\x1b[92m', player.name);
-    
+    console.log('\x1b[033m\x1b[39m', 'EXP:', playerExperience);
     for(let j: number = 0; j < player.hp; j++){
         playerHp += "I";
     }
@@ -89,10 +91,11 @@ function heal(enemy: Player, player: Player, playerMaxHp): number {
     return enemyDamage;
 }
 
-let floorTracker: number = 1;
 let playing: boolean = true;
 
 while(playing) {
+    let floorTracker: number = 1;
+    let experience: number = 0;
     let fightTracker: number = 1;
     const playerMaxHp: number = player.hp;
     let result: string = '';
@@ -101,7 +104,8 @@ while(playing) {
         const enemyMaxHp: number = enemy.hp;
 
         while(player.hp > 0 && enemy.hp > 0) {
-            displayStatistics(enemy, player, floorTracker, fightTracker, enemyMaxHp, playerMaxHp);
+            displayStatistics(enemy, player, floorTracker, fightTracker, enemyMaxHp, playerMaxHp, experience);
+
             let question: string = '';
             let inputValue: number = parseInt(getInput(question), 10);
 
@@ -125,6 +129,12 @@ while(playing) {
                 } else {
                     if(player.hp > 0) {
                         console.log(enemy.name, "died!");
+                        const levelExp: any = levelAndExperienceUp(player, experience, floorTracker);
+
+                        player = levelExp.player;
+                        experience = levelExp.experience;
+                        floorTracker = levelExp.floorTracker;
+
                         let question: string = '=== Press any key to continue ===';
                         getInput(question);
                     } else {
@@ -141,7 +151,12 @@ while(playing) {
             fightTracker++;
         }
 
-        enemy.hp = 30;
+        try {
+            enemy = getPlayer(enemyPath);
+        } catch (error) {
+            console.error(error.message);
+        }
+        
         fightTracker = 1;
         floorTracker++;
     }
@@ -149,7 +164,7 @@ while(playing) {
     const enemyMaxHp: number = bosse.hp;
 
     while(player.hp > 0 && bosse.hp > 0) {
-        displayStatistics(bosse, player, floorTracker, fightTracker, enemyMaxHp, playerMaxHp);
+        displayStatistics(bosse, player, floorTracker, fightTracker, enemyMaxHp, playerMaxHp, experience);
 
         let question: string = '';
         let inputValue: number = parseInt(getInput(question), 10);
