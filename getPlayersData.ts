@@ -43,7 +43,7 @@ export default function getPlayer(filePath: string): Player {
     const checkFile: boolean = fs.existsSync(filePath);
 
     if(!checkFile) {
-
+        console.error("File not found.");
     } else {
         players = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
@@ -89,7 +89,7 @@ export default function getPlayer(filePath: string): Player {
             }
         }
     } else {
-        console.error("Players' list is not valid!");
+        console.error("Players' list is not valid.");
     }
     
     return player;

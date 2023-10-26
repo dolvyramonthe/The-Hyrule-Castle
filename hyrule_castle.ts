@@ -5,9 +5,9 @@ import getPlayer from './getPlayersData';
 let player : Player;
 let enemy : Player;
 let bosse : Player;
-const playerPath: string = '../json/players.json';
-const enemyPath: string = '../json/enemies.json';
-const bossePath: string = '../json/bosses.json';
+const playerPath: string = './json/players.json';
+const enemyPath: string = './json/enemies.json';
+const bossePath: string = './json/bosses.json';
 
 try {
     player = getPlayer(playerPath);
@@ -141,7 +141,12 @@ while(playing) {
             fightTracker++;
         }
 
-        enemy.hp = 30;
+        try {
+            enemy = getPlayer(enemyPath);
+        } catch (error) {
+            console.error(error.message);
+        }
+        
         fightTracker = 1;
         floorTracker++;
     }
