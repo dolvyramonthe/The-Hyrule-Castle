@@ -1,6 +1,22 @@
 import * as fs from 'fs';
-import Player from './Interfaces';
 
+import { getDataFromFile } from './utils';
+
+interface Player {
+    id: number;
+    name: string;
+    hp: number;
+    mp: number;
+    str: number;
+    int: number;
+    def: number;
+    res: number;
+    spd: number;
+    luck: number;
+    race: number;
+    class: number;
+    rarity: number
+}
 interface NewPlayer {
     id: number;
     name: string;
@@ -36,17 +52,21 @@ function getRandomElement(array: NewPlayer[]): number | null {
 }
 
 export default function getPlayer(filePath: string): Player {
-    let players : Player[] = [];
+    let players : Player[] | null = [];
     let player : Player;
     let newPlayersList: any[] = [];
     let newPlayer: any = {};
     const checkFile: boolean = fs.existsSync(filePath);
 
-    if(!checkFile) {
+    try {
+        players = getDataFromFile(filePath);
+    } catch (error) {
+        console.error(error.message);
+    }
+    
+    if(!players) {
         console.error("File not found.");
     } else {
-        players = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-
         for (const iterator of players) {
             if(iterator.rarity === 0) {
                 newPlayer = iterator;
@@ -83,13 +103,15 @@ export default function getPlayer(filePath: string): Player {
     }
 
     if(playerId != -1) {
-        for (const item of players) {
-            if(item.id === playerId) {
-                player = item;
+        if(players) {
+            for (const item of players) {
+                if(item.id === playerId) {
+                    player = item;
+                }
             }
         }
     } else {
-        console.error("Players' list is not valid.");
+        console.error("Players' list is not valid!");
     }
     
     return player;

@@ -1,4 +1,4 @@
-export default interface Classe {
+export interface Classe {
     id: number,
     name: string,
     strengths: number[],
@@ -7,7 +7,8 @@ export default interface Classe {
     alignment: string,
     rarity: number
 }
-export default interface Player {
+
+export interface Player {
     id: number,
     name: string,
     hp: number,
@@ -23,7 +24,7 @@ export default interface Player {
     rarity: number
 }
 
-export default interface Race  {
+export interface Race  {
     id: number,
     name: string,
     strength: number[],
@@ -31,7 +32,7 @@ export default interface Race  {
     rarity: number
 }
 
-export default interface Spell {
+export interface Spell {
     id: number,
     name: string,
     cost: number,
@@ -43,7 +44,7 @@ export default interface Spell {
     rarity: number
 }
 
-export default interface Trap { 
+export interface Trap { 
     id: number, 
     name: string, 
     requirement: string, 
