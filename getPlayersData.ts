@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 
-// import Player from './Interfaces';
 import { getDataFromFile } from './utils';
 
 interface Player {

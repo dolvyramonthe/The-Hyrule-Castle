@@ -1,4 +1,3 @@
-// import Player from '../Interfaces'
 interface Player {
     id: number;
     name: string;

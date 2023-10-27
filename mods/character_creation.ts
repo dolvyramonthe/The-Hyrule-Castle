@@ -17,9 +17,9 @@ function setNumber(attribute: string, min: number, max: number): number {
     return value;
 }
 
-export default function setUpPlayer(classesPath: string, racesPath: string): Player {
+function generatePlayer(classePath: string, racePath: string): Player {
     let classes: Classe[] | null;
-    let races: Race[];
+    let races: Race[] | null;
     const id = 1;
     const name = setString();
     const hp = setNumber("HP", 45, 80);
@@ -32,7 +32,7 @@ export default function setUpPlayer(classesPath: string, racesPath: string): Pla
     const luck = setNumber("Luck", 5, 30);
 
     try {
-        races = getDataFromFile(racesPath);
+        races = getDataFromFile(racePath);
     } catch (error) {
         console.error("race not found.");
     }
@@ -51,7 +51,7 @@ export default function setUpPlayer(classesPath: string, racesPath: string): Pla
     }
 
     try {
-        classes = getDataFromFile(classesPath);
+        classes = getDataFromFile(classePath);
     } catch (error) {
         console.error("classe not found.");
     }
@@ -85,5 +85,58 @@ export default function setUpPlayer(classesPath: string, racesPath: string): Pla
         race,
         class: playerClass,
         rarity,
-    };
+    }
+}
+
+// function confirmPlayer(player: Player) {
+//     for (let key in player) {
+//         let value = player[key];
+        
+//         console.log(`${key}:`, value);
+//     }
+
+//     let validatePlayer: string = getInput('Do you confirm this Player? (Y / N)');
+
+//     while(!(validatePlayer.toLowerCase() === 'n' || validatePlayer.toLowerCase() === 'y')) {
+//         validatePlayer = getInput('Enter a valid option');
+//     }
+
+//     if(validatePlayer.toLowerCase() === 'y') {
+//         return player;
+//     } else if(validatePlayer.toLowerCase() === 'n') {
+//         player = generatePlayer(classesPath, racesPath);
+//     }
+// }
+
+export default function setUpPlayer(classesPath: string, racesPath: string): Player {
+    let player: Player;
+    let validating: boolean = false;
+
+    while(! validating) {
+        player = generatePlayer(classesPath, racesPath);
+
+        console.log("********** Your Statistics **********");
+
+        for (let key in player) {
+            let value = player[key];
+            
+            if(key != 'id' && key != 'rarity') {
+                console.log(`${key}:`, value);
+            }
+        }
+
+        let validatePlayer: string = getInput('Do you confirm this Player? (Y / N)');
+
+        while(!(validatePlayer.toLowerCase() === 'n' || validatePlayer.toLowerCase() === 'y')) {
+            validatePlayer = getInput('Enter a valid option');
+        }
+
+        if(validatePlayer.toLowerCase() === 'y') {
+            validating = true;
+        } else if(validatePlayer.toLowerCase() === 'n') {
+            validating = false;
+        }
+    }
+
+    return player;
 }
