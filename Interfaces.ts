@@ -8,7 +8,7 @@ export interface Classe {
     rarity: number
 }
 
-export default interface Player {
+export interface Player {
     id: number,
     name: string,
     hp: number,

@@ -1,4 +1,19 @@
-import Player from '../Interfaces'
+// import Player from '../Interfaces'
+interface Player {
+    id: number;
+    name: string;
+    hp: number;
+    mp: number;
+    str: number;
+    int: number;
+    def: number;
+    res: number;
+    spd: number;
+    luck: number;
+    race: number;
+    class: number;
+    rarity: number
+}
 
 function getExperience(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
